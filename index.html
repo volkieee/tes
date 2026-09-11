@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,9 @@
 			--mint: #dceee4;
 		}
 
-		* { box-sizing: border-box; }
+		* {
+			box-sizing: border-box;
+		}
 
 		body {
 			margin: 0;
@@ -39,53 +42,261 @@
 			background: #1e332a;
 		}
 
-		.brand { margin-bottom: 56px; font-size: 21px; font-weight: bold; letter-spacing: .4px; }
-		.brand span { color: #f5a388; }
-		.nav-label { margin-bottom: 12px; color: #93ab9e; font: 11px Arial, sans-serif; letter-spacing: 1.5px; text-transform: uppercase; }
-		.nav-item { padding: 12px 14px; border-radius: 8px; color: #fff; background: rgba(255,255,255,.1); font: 14px Arial, sans-serif; }
-		.aside-note { margin-top: auto; padding-top: 24px; color: #aabcb1; font: 12px/1.6 Arial, sans-serif; }
+		.brand {
+			margin-bottom: 56px;
+			font-size: 21px;
+			font-weight: bold;
+			letter-spacing: .4px;
+		}
 
-		main { padding: 42px clamp(24px, 5vw, 70px); overflow: hidden; }
-		.topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 34px; }
-		.eyebrow { margin: 0 0 8px; color: var(--accent-dark); font: bold 11px Arial, sans-serif; letter-spacing: 1.8px; text-transform: uppercase; }
-		h1 { margin: 0; font-size: clamp(31px, 4vw, 47px); line-height: 1; font-weight: normal; }
-		.date { color: var(--muted); font: 13px Arial, sans-serif; }
+		.brand span {
+			color: #f5a388;
+		}
 
-		.content-grid { display: grid; grid-template-columns: minmax(245px, 300px) 1fr; gap: 24px; align-items: start; }
-		.panel { padding: 25px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); box-shadow: 0 8px 24px rgba(30, 51, 42, .04); }
-		.panel h2 { margin: 0 0 7px; font-size: 22px; font-weight: normal; }
-		.panel-intro { margin: 0 0 22px; color: var(--muted); font: 13px/1.5 Arial, sans-serif; }
-		label { display: block; margin: 17px 0 7px; color: #526058; font: bold 12px Arial, sans-serif; }
-		input { width: 100%; padding: 12px 13px; border: 1px solid #ccd8cf; border-radius: 7px; outline: none; color: var(--ink); background: #fbfdfb; font: 15px Arial, sans-serif; }
-		input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(229, 107, 77, .13); }
-		button { width: 100%; margin-top: 22px; padding: 13px 16px; border: 0; border-radius: 7px; cursor: pointer; color: white; background: var(--accent); font: bold 13px Arial, sans-serif; transition: background .2s, transform .2s; }
-		button:hover { background: var(--accent-dark); transform: translateY(-1px); }
+		.nav-label {
+			margin-bottom: 12px;
+			color: #93ab9e;
+			font: 11px Arial, sans-serif;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+		}
 
-		.dashboard-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 17px; }
-		.dashboard-head h2 { margin: 0; font-size: 25px; font-weight: normal; }
-		.count { padding: 8px 11px; border-radius: 99px; color: #286146; background: var(--mint); font: bold 12px Arial, sans-serif; }
-		.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 9px; }
-		table { width: 100%; min-width: 500px; border-collapse: collapse; background: white; font: 13px Arial, sans-serif; }
-		th, td { padding: 15px 17px; border-bottom: 1px solid #edf1ee; text-align: left; }
-		th { color: var(--muted); background: #f7faf7; font-size: 11px; letter-spacing: .8px; text-transform: uppercase; }
-		tbody tr:last-child td { border-bottom: 0; }
-		.empty { padding: 44px 20px; color: var(--muted); text-align: center; }
-		.empty strong { display: block; margin-bottom: 5px; color: var(--ink); font: 18px Georgia, serif; }
-		.delete-btn { width: auto; margin: 0; padding: 6px 9px; color: var(--accent-dark); background: transparent; font-size: 12px; }
-		.delete-btn:hover { background: #fff0eb; transform: none; }
+		.nav-item {
+			padding: 12px 14px;
+			border-radius: 8px;
+			color: #fff;
+			background: rgba(255, 255, 255, .1);
+			font: 14px Arial, sans-serif;
+		}
+
+		.aside-note {
+			margin-top: auto;
+			padding-top: 24px;
+			color: #aabcb1;
+			font: 12px/1.6 Arial, sans-serif;
+		}
+
+		main {
+			padding: 42px clamp(24px, 5vw, 70px);
+			overflow: hidden;
+		}
+
+		.topbar {
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+			gap: 20px;
+			margin-bottom: 34px;
+		}
+
+		.eyebrow {
+			margin: 0 0 8px;
+			color: var(--accent-dark);
+			font: bold 11px Arial, sans-serif;
+			letter-spacing: 1.8px;
+			text-transform: uppercase;
+		}
+
+		h1 {
+			margin: 0;
+			font-size: clamp(31px, 4vw, 47px);
+			line-height: 1;
+			font-weight: normal;
+		}
+
+		.date {
+			color: var(--muted);
+			font: 13px Arial, sans-serif;
+		}
+
+		.content-grid {
+			display: grid;
+			grid-template-columns: minmax(245px, 300px) 1fr;
+			gap: 24px;
+			align-items: start;
+		}
+
+		.panel {
+			padding: 25px;
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			background: var(--white);
+			box-shadow: 0 8px 24px rgba(30, 51, 42, .04);
+		}
+
+		.panel h2 {
+			margin: 0 0 7px;
+			font-size: 22px;
+			font-weight: normal;
+		}
+
+		.panel-intro {
+			margin: 0 0 22px;
+			color: var(--muted);
+			font: 13px/1.5 Arial, sans-serif;
+		}
+
+		label {
+			display: block;
+			margin: 17px 0 7px;
+			color: #526058;
+			font: bold 12px Arial, sans-serif;
+		}
+
+		input {
+			width: 100%;
+			padding: 12px 13px;
+			border: 1px solid #ccd8cf;
+			border-radius: 7px;
+			outline: none;
+			color: var(--ink);
+			background: #fbfdfb;
+			font: 15px Arial, sans-serif;
+		}
+
+		input:focus {
+			border-color: var(--accent);
+			box-shadow: 0 0 0 3px rgba(229, 107, 77, .13);
+		}
+
+		button {
+			width: 100%;
+			margin-top: 22px;
+			padding: 13px 16px;
+			border: 0;
+			border-radius: 7px;
+			cursor: pointer;
+			color: white;
+			background: var(--accent);
+			font: bold 13px Arial, sans-serif;
+			transition: background .2s, transform .2s;
+		}
+
+		button:hover {
+			background: var(--accent-dark);
+			transform: translateY(-1px);
+		}
+
+		.dashboard-head {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			margin-bottom: 17px;
+		}
+
+		.dashboard-head h2 {
+			margin: 0;
+			font-size: 25px;
+			font-weight: normal;
+		}
+
+		.count {
+			padding: 8px 11px;
+			border-radius: 99px;
+			color: #286146;
+			background: var(--mint);
+			font: bold 12px Arial, sans-serif;
+		}
+
+		.table-wrap {
+			overflow-x: auto;
+			border: 1px solid var(--line);
+			border-radius: 9px;
+		}
+
+		table {
+			width: 100%;
+			min-width: 500px;
+			border-collapse: collapse;
+			background: white;
+			font: 13px Arial, sans-serif;
+		}
+
+		th,
+		td {
+			padding: 15px 17px;
+			border-bottom: 1px solid #edf1ee;
+			text-align: left;
+		}
+
+		th {
+			color: var(--muted);
+			background: #f7faf7;
+			font-size: 11px;
+			letter-spacing: .8px;
+			text-transform: uppercase;
+		}
+
+		tbody tr:last-child td {
+			border-bottom: 0;
+		}
+
+		.empty {
+			padding: 44px 20px;
+			color: var(--muted);
+			text-align: center;
+		}
+
+		.empty strong {
+			display: block;
+			margin-bottom: 5px;
+			color: var(--ink);
+			font: 18px Georgia, serif;
+		}
+
+		.delete-btn {
+			width: auto;
+			margin: 0;
+			padding: 6px 9px;
+			color: var(--accent-dark);
+			background: transparent;
+			font-size: 12px;
+		}
+
+		.delete-btn:hover {
+			background: #fff0eb;
+			transform: none;
+		}
 
 		@media (max-width: 760px) {
-			.app { grid-template-columns: 1fr; }
-			aside { min-height: auto; padding: 20px 24px; }
-			.brand { margin-bottom: 20px; }
-			.aside-note { display: none; }
-			main { padding: 30px 20px; }
-			.topbar { display: block; }
-			.date { display: block; margin-top: 12px; }
-			.content-grid { grid-template-columns: 1fr; }
+			.app {
+				grid-template-columns: 1fr;
+			}
+
+			aside {
+				min-height: auto;
+				padding: 20px 24px;
+			}
+
+			.brand {
+				margin-bottom: 20px;
+			}
+
+			.aside-note {
+				display: none;
+			}
+
+			main {
+				padding: 30px 20px;
+			}
+
+			.topbar {
+				display: block;
+			}
+
+			.date {
+				display: block;
+				margin-top: 12px;
+			}
+
+			.content-grid {
+				grid-template-columns: 1fr;
+			}
 		}
 	</style>
 </head>
+
 <body>
 	<div class="app">
 		<aside>
@@ -123,7 +334,13 @@
 					<div class="table-wrap">
 						<table>
 							<thead>
-								<tr><th>No.</th><th>Nama</th><th>Email</th><th>Waktu</th><th>Aksi</th></tr>
+								<tr>
+									<th>No.</th>
+									<th>Nama</th>
+									<th>Email</th>
+									<th>Waktu</th>
+									<th>Aksi</th>
+								</tr>
 							</thead>
 							<tbody id="data-list"></tbody>
 						</table>
@@ -191,4 +408,5 @@
 		renderRecords();
 	</script>
 </body>
+
 </html>
