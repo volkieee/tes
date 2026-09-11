@@ -350,12 +350,40 @@
 		</main>
 	</div>
 
-	<script>
+	<script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+		import {
+			getFirestore,
+			collection,
+			addDoc,
+			deleteDoc,
+			doc,
+			onSnapshot,
+			query,
+			orderBy
+		} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+		// Konfigurasi Firebase
+		const firebaseConfig = {
+			apiKey: "AIzaSyAnsEVQLI-UkZ5J060i4hXjjmb55fZPgGs",
+			authDomain: "tesss-85fab.firebaseapp.com",
+			projectId: "tesss-85fab",
+			storageBucket: "tesss-85fab.firebasestorage.app",
+			messagingSenderId: "860463416335",
+			appId: "1:860463416335:web:79f462f6e05e119410cf7a",
+			measurementId: "G-Q98X9R8WMZ"
+		};
+
+		// Inisialisasi Firebase & Firestore
+		const app = initializeApp(firebaseConfig);
+		const db = getFirestore(app);
+		const recordsCol = collection(db, 'ruang-admin-data');
+
 		const form = document.getElementById('data-form');
 		const list = document.getElementById('data-list');
 		const count = document.getElementById('count');
 		const storageKey = 'ruang-admin-data';
-		let records = JSON.parse(localStorage.getItem(storageKey) || '[]');
+		let records = [];
 
 		document.getElementById('today').textContent = new Intl.DateTimeFormat('id-ID', {
 			day: 'numeric', month: 'long', year: 'numeric'
@@ -371,41 +399,104 @@
 			list.innerHTML = records.map((record, index) => `
 				<tr>
 					<td>${index + 1}</td>
-					<td>${escapeHtml(record.name)}</td>
-					<td>${escapeHtml(record.email)}</td>
-					<td>${record.time}</td>
+					<td>${escapeHtml(record.name || '')}</td>
+					<td>${escapeHtml(record.email || '')}</td>
+					<td>${record.time || '-'}</td>
 					<td><button class="delete-btn" data-id="${record.id}" type="button">Hapus</button></td>
 				</tr>`).join('');
 		}
 
 		function escapeHtml(value) {
-			return value.replace(/[&<>'"]/g, character => ({
+			return String(value).replace(/[&<>'"]/g, character => ({
 				'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;'
 			}[character]));
 		}
 
-		form.addEventListener('submit', event => {
+		// Migrasi data lokal yang mungkin sudah ada sebelumnya ke Firestore
+		async function migrateLocalData() {
+			try {
+				const savedLocal = localStorage.getItem(storageKey);
+				if (savedLocal) {
+					const localItems = JSON.parse(savedLocal);
+					if (Array.isArray(localItems) && localItems.length > 0) {
+						for (const item of localItems) {
+							await addDoc(recordsCol, {
+								name: item.name || '',
+								email: item.email || '',
+								time: item.time || '',
+								createdAt: item.id || Date.now()
+							});
+						}
+						localStorage.removeItem(storageKey);
+					}
+				}
+			} catch (err) {
+				console.warn('Migrasi data lokal gagal:', err);
+			}
+		}
+		migrateLocalData();
+
+		// Listener real-time Firestore (diurutkan dari data terbaru)
+		const recordsQuery = query(recordsCol, orderBy('createdAt', 'desc'));
+		onSnapshot(recordsQuery, (snapshot) => {
+			records = snapshot.docs.map(doc => ({
+				id: doc.id,
+				...doc.data()
+			}));
+			renderRecords();
+		}, (error) => {
+			console.error("Gagal memuat data Firestore:", error);
+			list.innerHTML = `<tr><td class="empty" colspan="5"><strong>Terjadi kendala koneksi</strong>${escapeHtml(error.message)}</td></tr>`;
+		});
+
+		// Tambah data baru ke Firestore
+		form.addEventListener('submit', async event => {
 			event.preventDefault();
+			const submitBtn = form.querySelector('button[type="submit"]');
+			const originalText = submitBtn.textContent;
 			const data = new FormData(form);
-			records.unshift({
-				id: Date.now(),
+
+			const newRecord = {
 				name: data.get('name').trim(),
 				email: data.get('email').trim(),
-				time: new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit' }).format(new Date())
-			});
-			localStorage.setItem(storageKey, JSON.stringify(records));
-			form.reset();
-			renderRecords();
+				time: new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit' }).format(new Date()),
+				createdAt: Date.now()
+			};
+
+			try {
+				submitBtn.disabled = true;
+				submitBtn.textContent = 'Menyimpan...';
+				await addDoc(recordsCol, newRecord);
+				form.reset();
+			} catch (error) {
+				console.error("Gagal menyimpan ke Firestore:", error);
+				alert("Gagal menyimpan data: " + error.message);
+			} finally {
+				submitBtn.disabled = false;
+				submitBtn.textContent = originalText;
+			}
 		});
 
-		list.addEventListener('click', event => {
+		// Hapus data dari Firestore
+		list.addEventListener('click', async event => {
 			if (!event.target.matches('.delete-btn')) return;
-			records = records.filter(record => record.id !== Number(event.target.dataset.id));
-			localStorage.setItem(storageKey, JSON.stringify(records));
-			renderRecords();
-		});
+			const docId = event.target.dataset.id;
+			if (!docId) return;
 
-		renderRecords();
+			const deleteBtn = event.target;
+			const originalText = deleteBtn.textContent;
+
+			try {
+				deleteBtn.disabled = true;
+				deleteBtn.textContent = '...';
+				await deleteDoc(doc(db, 'ruang-admin-data', docId));
+			} catch (error) {
+				console.error("Gagal menghapus data:", error);
+				alert("Gagal menghapus data: " + error.message);
+				deleteBtn.disabled = false;
+				deleteBtn.textContent = originalText;
+			}
+		});
 	</script>
 </body>
 
