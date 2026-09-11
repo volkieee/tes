@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard</title>
+	<style>
+		:root {
+			--ink: #17241f;
+			--muted: #6d7972;
+			--line: #e2e9e4;
+			--paper: #f7faf7;
+			--white: #ffffff;
+			--accent: #e56b4d;
+			--accent-dark: #bd4e35;
+			--mint: #dceee4;
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			color: var(--ink);
+			background: var(--paper);
+			font-family: Georgia, "Times New Roman", serif;
+		}
+
+		.app {
+			display: grid;
+			grid-template-columns: 245px 1fr;
+			min-height: 100vh;
+		}
+
+		aside {
+			display: flex;
+			flex-direction: column;
+			padding: 32px 24px;
+			color: white;
+			background: #1e332a;
+		}
+
+		.brand { margin-bottom: 56px; font-size: 21px; font-weight: bold; letter-spacing: .4px; }
+		.brand span { color: #f5a388; }
+		.nav-label { margin-bottom: 12px; color: #93ab9e; font: 11px Arial, sans-serif; letter-spacing: 1.5px; text-transform: uppercase; }
+		.nav-item { padding: 12px 14px; border-radius: 8px; color: #fff; background: rgba(255,255,255,.1); font: 14px Arial, sans-serif; }
+		.aside-note { margin-top: auto; padding-top: 24px; color: #aabcb1; font: 12px/1.6 Arial, sans-serif; }
+
+		main { padding: 42px clamp(24px, 5vw, 70px); overflow: hidden; }
+		.topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 34px; }
+		.eyebrow { margin: 0 0 8px; color: var(--accent-dark); font: bold 11px Arial, sans-serif; letter-spacing: 1.8px; text-transform: uppercase; }
+		h1 { margin: 0; font-size: clamp(31px, 4vw, 47px); line-height: 1; font-weight: normal; }
+		.date { color: var(--muted); font: 13px Arial, sans-serif; }
+
+		.content-grid { display: grid; grid-template-columns: minmax(245px, 300px) 1fr; gap: 24px; align-items: start; }
+		.panel { padding: 25px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); box-shadow: 0 8px 24px rgba(30, 51, 42, .04); }
+		.panel h2 { margin: 0 0 7px; font-size: 22px; font-weight: normal; }
+		.panel-intro { margin: 0 0 22px; color: var(--muted); font: 13px/1.5 Arial, sans-serif; }
+		label { display: block; margin: 17px 0 7px; color: #526058; font: bold 12px Arial, sans-serif; }
+		input { width: 100%; padding: 12px 13px; border: 1px solid #ccd8cf; border-radius: 7px; outline: none; color: var(--ink); background: #fbfdfb; font: 15px Arial, sans-serif; }
+		input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(229, 107, 77, .13); }
+		button { width: 100%; margin-top: 22px; padding: 13px 16px; border: 0; border-radius: 7px; cursor: pointer; color: white; background: var(--accent); font: bold 13px Arial, sans-serif; transition: background .2s, transform .2s; }
+		button:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+		.dashboard-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 17px; }
+		.dashboard-head h2 { margin: 0; font-size: 25px; font-weight: normal; }
+		.count { padding: 8px 11px; border-radius: 99px; color: #286146; background: var(--mint); font: bold 12px Arial, sans-serif; }
+		.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 9px; }
+		table { width: 100%; min-width: 500px; border-collapse: collapse; background: white; font: 13px Arial, sans-serif; }
+		th, td { padding: 15px 17px; border-bottom: 1px solid #edf1ee; text-align: left; }
+		th { color: var(--muted); background: #f7faf7; font-size: 11px; letter-spacing: .8px; text-transform: uppercase; }
+		tbody tr:last-child td { border-bottom: 0; }
+		.empty { padding: 44px 20px; color: var(--muted); text-align: center; }
+		.empty strong { display: block; margin-bottom: 5px; color: var(--ink); font: 18px Georgia, serif; }
+		.delete-btn { width: auto; margin: 0; padding: 6px 9px; color: var(--accent-dark); background: transparent; font-size: 12px; }
+		.delete-btn:hover { background: #fff0eb; transform: none; }
+
+		@media (max-width: 760px) {
+			.app { grid-template-columns: 1fr; }
+			aside { min-height: auto; padding: 20px 24px; }
+			.brand { margin-bottom: 20px; }
+			.aside-note { display: none; }
+			main { padding: 30px 20px; }
+			.topbar { display: block; }
+			.date { display: block; margin-top: 12px; }
+			.content-grid { grid-template-columns: 1fr; }
+		}
+	</style>
+</head>
+<body>
+	<div class="app">
+		<aside>
+			<div class="brand">Ruang<span>Admin</span></div>
+			<div class="nav-label">Menu utama</div>
+			<div class="nav-item">Dashboard</div>
+			<p class="aside-note">Kelola data yang masuk dengan ringkas dan mudah.</p>
+		</aside>
+
+		<main>
+			<header class="topbar">
+				<div>
+					<p class="eyebrow">Panel kontrol</p>
+					<h1>Selamat datang kembali.</h1>
+				</div>
+				<div class="date" id="today"></div>
+			</header>
+
+			<section class="content-grid">
+				<form class="panel" id="data-form">
+					<h2>Tambah data</h2>
+					<p class="panel-intro">Isi form berikut untuk menambahkan data ke dashboard.</p>
+					<label for="name">Nama</label>
+					<input id="name" name="name" type="text" placeholder="Contoh: Budi Santoso" required>
+					<label for="email">Email</label>
+					<input id="email" name="email" type="email" placeholder="budi@email.com" required>
+					<button type="submit">Simpan data</button>
+				</form>
+
+				<section>
+					<div class="dashboard-head">
+						<h2>Data terbaru</h2>
+						<span class="count" id="count">0 data</span>
+					</div>
+					<div class="table-wrap">
+						<table>
+							<thead>
+								<tr><th>No.</th><th>Nama</th><th>Email</th><th>Waktu</th><th>Aksi</th></tr>
+							</thead>
+							<tbody id="data-list"></tbody>
+						</table>
+					</div>
+				</section>
+			</section>
+		</main>
+	</div>
+
+	<script>
+		const form = document.getElementById('data-form');
+		const list = document.getElementById('data-list');
+		const count = document.getElementById('count');
+		const storageKey = 'ruang-admin-data';
+		let records = JSON.parse(localStorage.getItem(storageKey) || '[]');
+
+		document.getElementById('today').textContent = new Intl.DateTimeFormat('id-ID', {
+			day: 'numeric', month: 'long', year: 'numeric'
+		}).format(new Date());
+
+		function renderRecords() {
+			count.textContent = `${records.length} data`;
+			if (!records.length) {
+				list.innerHTML = '<tr><td class="empty" colspan="5"><strong>Belum ada data</strong>Data dari form akan muncul di sini.</td></tr>';
+				return;
+			}
+
+			list.innerHTML = records.map((record, index) => `
+				<tr>
+					<td>${index + 1}</td>
+					<td>${escapeHtml(record.name)}</td>
+					<td>${escapeHtml(record.email)}</td>
+					<td>${record.time}</td>
+					<td><button class="delete-btn" data-id="${record.id}" type="button">Hapus</button></td>
+				</tr>`).join('');
+		}
+
+		function escapeHtml(value) {
+			return value.replace(/[&<>'"]/g, character => ({
+				'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;'
+			}[character]));
+		}
+
+		form.addEventListener('submit', event => {
+			event.preventDefault();
+			const data = new FormData(form);
+			records.unshift({
+				id: Date.now(),
+				name: data.get('name').trim(),
+				email: data.get('email').trim(),
+				time: new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit' }).format(new Date())
+			});
+			localStorage.setItem(storageKey, JSON.stringify(records));
+			form.reset();
+			renderRecords();
+		});
+
+		list.addEventListener('click', event => {
+			if (!event.target.matches('.delete-btn')) return;
+			records = records.filter(record => record.id !== Number(event.target.dataset.id));
+			localStorage.setItem(storageKey, JSON.stringify(records));
+			renderRecords();
+		});
+
+		renderRecords();
+	</script>
+</body>
+</html>
